@@ -30,6 +30,22 @@ function getLatestTweets() {
                       console.log(data); 
                       });
                     }
+
+
+
+                    function noSongProvided() {
+                        console.log('no song provided so going random');
+        
+                        spotify.search({ type: 'track', query: 'The Sign' }, function(err, data) {
+                            if (err) {
+                              return console.log('Error occurred: ' + err);
+                            }
+                           
+                          console.log(data); 
+                          });
+
+
+                        }
         
 
 
@@ -39,6 +55,26 @@ function getLatestTweets() {
 
                         function getMovieData() {
                             omdb.search(SongOrMovieName, function(err, movies) {
+                                if(err) {
+                                    return console.error(err);
+                                }
+                             
+                                if(movies.length < 1) {
+                                    return console.log('No movies were found!');
+                                }
+                             
+                                movies.forEach(function(movie) {
+                                    console.log('%s (%d)', movie.title, movie.year);
+                                });
+                             
+                                // Saw (2004)  
+                            });
+                        }
+
+
+
+                        function noMovieProvided() {
+                            omdb.search('Mr. Nobody', function(err, movies) {
                                 if(err) {
                                     return console.error(err);
                                 }
@@ -90,16 +126,16 @@ if (requestType === "my-tweets") {
 } else if (requestType === "spotify-this-song") {
     console.log('Showing song info for: ' + SongOrMovieName);
     getSongData();
-    // if (SongOrMovieName === '') {
-    //     spotify.noSongProvided();
-    // }
+     if (SongOrMovieName === '') {
+         noSongProvided();
+     }
     
 } else if (requestType === "movie-this") {
     console.log('Showing movie info for: ' + SongOrMovieName);
     getMovieData();
-    //     if (SongOrMovieName === '') {
-    //     movie1.noMovieProvided();
-    // } 
+         if (SongOrMovieName === '') {
+         noMovieProvided();
+     } 
    
 } else if (requestType === "do-what-it-says") {
     console.log('doing what it says');
