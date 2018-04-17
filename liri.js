@@ -8,12 +8,41 @@ var spotify = new Spotify(keys.spotify);
 // Hold the value for the type of request, (my-tweets, spotify, movie, dowhatissays)
 var requestType = process.argv[2];
 // The name of the song or movie they are requesting
-var SongOrMovieName = process.argv[3];
+//var SongOrMovieName = process.argv[3];
  var client = new Twitter(keys.twitter);
+
+ // Store all of the arguments in an array
+var nodeArgs = process.argv;
+
+// Create an empty variable for holding the movie name
+var SongOrMovieName = "";
+
+// Loop through all the words in the node argument
+// And do a little for-loop magic to handle the inclusion of "+"s
+for (var i = 2; i < nodeArgs.length; i++) {
+
+  if (i > 2 && i < nodeArgs.length) {
+
+    SongOrMovieName = SongOrMovieName + "+" + nodeArgs[i];
+
+  }
+
+  else {
+
+    SongOrMovieName += nodeArgs[i];
+
+  }
+}
+
+
+
+
+
+
 
 
 function getLatestTweets() {
-    var params = {screen_name: 'bikerightback'};
+    var params = {screen_name: 'bikerightback', count: 20};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     console.log(tweets);
@@ -60,47 +89,65 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 
 
                         function getMovieData() {
-                            omdb.search(SongOrMovieName, function(err, movies) {
+                            omdb.get(SongOrMovieName, true, function(err, movie) {
                                 if(err) {
                                     return console.error(err);
                                 }
                              
-                                if(movies.length < 1) {
-                                    return console.log('No movies were found!');
+                                if(!movie) {
+                                    return console.log('Movie not found!');
                                 }
                              
-                                movies.forEach(function(movie) {
-                                    console.log('%s (%d)', movie.title, movie.year);
-                                });
+                                console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
+                                console.log(movie.plot);
                              
-                                // Saw (2004)  
+
                             });
                         }
 
 
 
                         function noMovieProvided() {
-                            omdb.search('Mr. Nobody', function(err, movies) {
+                            omdb.get('Mr. Nobody', true, function(err, movie) {
                                 if(err) {
                                     return console.error(err);
                                 }
                              
-                                if(movies.length < 1) {
-                                    return console.log('No movies were found!');
+                                if(!movie) {
+                                    return console.log('Movie not found!');
                                 }
                              
-                                movies.forEach(function(movie) {
-                                    console.log('%s (%d)', movie.title, movie.year);
-                                });
+                                console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
+                                console.log(movie.plot);
                              
-                                // Saw (2004)  
+
                             });
                         }
 
 
 
                        
+function doWhatItSays() {
+    fs.readFile("log.txt", "utf8", function (error, data) {
 
+        //need to read the command part and what they want to query as seperate vars
+        //then I need to store those to argv2 and 3
+        // then It should function
+
+        //requestType = ;
+        //SongOrMovieName = ;
+
+
+
+        // If the code experiences any errors it will log the error to the console.
+        if (error) {
+            return console.log(error);
+        }
+        // We will then print the contents of data
+        console.log(data);
+
+      });
+}
 
 
 
