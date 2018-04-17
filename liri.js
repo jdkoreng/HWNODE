@@ -13,6 +13,12 @@ var SongOrMovieName = process.argv[3];
 
 
 function getLatestTweets() {
+    var params = {screen_name: 'bikerightback'};
+client.get('statuses/user_timeline', params, function(error, tweets, response) {
+  if (!error) {
+    console.log(tweets);
+  }
+});
 
 }
 
