@@ -35,8 +35,8 @@ var nodeArgs = process.argv;
    }
  }
 
- var queryUrl = "http://www.omdbapi.com/?t=" + SongOrMovieName + "&y=&plot=short&apikey=trilogy";
- var queryUrlRandom = "http://www.omdbapi.com/?t=" + 'Mr.Nobody' + "&y=&plot=short&apikey=trilogy";
+ var queryUrl = "http://www.omdbapi.com/?t=" + SongOrMovieName + "&y=&plot=short&apikey=trilogy&tomatoes=true";
+ var queryUrlRandom = "http://www.omdbapi.com/?t=" + 'Mr.Nobody' + "&y=&plot=short&apikey=trilogy&tomatoes=trues";
 
 
 
@@ -102,6 +102,12 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
                                   // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
                                   console.log("Release Year: " + JSON.parse(body).Year);
                                   console.log("Plot: " + JSON.parse(body).Plot);
+                                  console.log("Cast: " + JSON.parse(body).Actors);
+                                  console.log("IMDB Rating: " + JSON.parse(body).imdbRating);
+                                  console.log("Tomato Rating: " + JSON.parse(body).tomatoRating);
+
+
+                                  
                                 }
                               });
                               
