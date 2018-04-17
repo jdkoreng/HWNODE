@@ -10,29 +10,33 @@ var requestType = process.argv[2];
 // The name of the song or movie they are requesting
 //var SongOrMovieName = process.argv[3];
  var client = new Twitter(keys.twitter);
+ 
 
  // Store all of the arguments in an array
 var nodeArgs = process.argv;
 
-// Create an empty variable for holding the movie name
-var SongOrMovieName = "";
+// // Create an empty variable for holding the movie name
+ var SongOrMovieName = "";
 
-// Loop through all the words in the node argument
-// And do a little for-loop magic to handle the inclusion of "+"s
-for (var i = 2; i < nodeArgs.length; i++) {
+// // Loop through all the words in the node argument
+// // And do a little for-loop magic to handle the inclusion of "+"s
+ for (var i = 3; i < nodeArgs.length; i++) {
 
-  if (i > 2 && i < nodeArgs.length) {
+   if (i > 3 && i < nodeArgs.length) {
 
-    SongOrMovieName = SongOrMovieName + "+" + nodeArgs[i];
+     SongOrMovieName = SongOrMovieName + "+" + nodeArgs[i];
 
-  }
+   }
 
-  else {
+   else {
 
-    SongOrMovieName += nodeArgs[i];
+     SongOrMovieName += nodeArgs[i];
 
-  }
-}
+   }
+ }
+
+ var queryUrl = "http://www.omdbapi.com/?t=" + SongOrMovieName + "&y=&plot=short&apikey=trilogy";
+ var queryUrlRandom = "http://www.omdbapi.com/?t=" + 'Mr.Nobody' + "&y=&plot=short&apikey=trilogy";
 
 
 
@@ -89,39 +93,37 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
 
 
                         function getMovieData() {
-                            omdb.get(SongOrMovieName, true, function(err, movie) {
-                                if(err) {
-                                    return console.error(err);
-                                }
-                             
-                                if(!movie) {
-                                    return console.log('Movie not found!');
-                                }
-                             
-                                console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
-                                console.log(movie.plot);
-                             
+                            request(queryUrl, function(error, response, body) {
 
-                            });
+                                // If the request is successful
+                                if (!error && response.statusCode === 200) {
+                              
+                                  // Parse the body of the site and recover just the imdbRating
+                                  // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+                                  console.log("Release Year: " + JSON.parse(body).Year);
+                                  console.log("Plot: " + JSON.parse(body).Plot);
+                                }
+                              });
+                              
                         }
 
 
 
                         function noMovieProvided() {
-                            omdb.get('Mr. Nobody', true, function(err, movie) {
-                                if(err) {
-                                    return console.error(err);
-                                }
-                             
-                                if(!movie) {
-                                    return console.log('Movie not found!');
-                                }
-                             
-                                console.log('%s (%d) %d/10', movie.title, movie.year, movie.imdb.rating);
-                                console.log(movie.plot);
-                             
+                            request(queryUrlRandom, function(error, response, body) {
 
-                            });
+                                // If the request is successful
+                                if (!error && response.statusCode === 200) {
+                              
+                                  // Parse the body of the site and recover just the imdbRating
+                                  // (Note: The syntax below for parsing isn't obvious. Just spend a few moments dissecting it).
+                                  
+                                  console.log("Release Year: " + JSON.parse(body).Year);
+                                  console.log("Plot: " + JSON.parse(body).Plot);
+                                 
+                                }
+                              });
+                              
                         }
 
 
