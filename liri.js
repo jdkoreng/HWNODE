@@ -180,17 +180,16 @@ if (requestType === "my-tweets") {
   
 } else if (requestType === "spotify-this-song") {
     console.log('Showing song info for: ' + SongOrMovieName);
-    getSongData();
+    
      if (SongOrMovieName === '') {
          noSongProvided();
-     }
+     } else getSongData();
     
 } else if (requestType === "movie-this") {
     console.log('Showing movie info for: ' + SongOrMovieName);
-    getMovieData();
          if (SongOrMovieName === '') {
          noMovieProvided();
-     } 
+     } else getMovieData();
    
 } else if (requestType === "do-what-it-says") {
     console.log('doing what it says');
